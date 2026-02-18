@@ -6,70 +6,75 @@ require('dotenv').config();
 
 const BLOG_ROOT = path.join(__dirname, '..');
 const POSTS_DIR = path.join(BLOG_ROOT, '_posts');
-const AI_KEYWORDS = ['ai', 'intelligence', 'learning', 'gpt', 'llm', 'model', 'robot', 'gpu', 'nvidia', 'openai', 'deepseek', 'tech', 'silicon'];
 
-function isAIRelated(title) {
-    const lowerTitle = title.toLowerCase();
-    return AI_KEYWORDS.some(keyword => lowerTitle.includes(keyword));
+// 專業新聞播報模板
+const NEWS_TEMPLATES = [
+    "根據本台獲得的最新消息，{title} 在今日引發了業界高度關注。分析師認為，這項發展將深遠影響 AI 的未來布局。",
+    "技術社群傳來重要情報：{title}。這項突破性進展顯示了當前人工智慧在技術落地上的新高度。",
+    "今日最受矚目的動態非 {title} 莫屬。我們對此進行了深度追蹤，這不僅是技術更新，更是市場轉向的關鍵信號。"
+];
+
+function getRandomTemplate(title) {
+    const template = NEWS_TEMPLATES[Math.floor(Math.random() * NEWS_TEMPLATES.length)];
+    return template.replace('{title}', title);
 }
 
 async function fetchHackerNews() {
     try {
+        console.log('📡 正在連線全球技術網絡...');
         const { data: storyIds } = await axios.get('https://hacker-news.firebaseio.com/v0/topstories.json');
         const articles = [];
-        for (const storyId of storyIds.slice(0, 60)) {
+        
+        // 抓取關鍵新聞
+        for (const storyId of storyIds.slice(0, 30)) {
             const { data: story } = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${storyId}.json`);
-            if (story && story.title && isAIRelated(story.title)) {
+            const title = story.title.toLowerCase();
+            
+            // 關鍵字過濾
+            if (title.includes('ai') || title.includes('gpt') || title.includes('nvidia') || title.includes('model')) {
                 articles.push({
                     title: story.title,
                     url: story.url || `https://news.ycombinator.com/item?id=${storyId}`,
-                    source: 'GLOBAL TECH NETWORK'
+                    reporter: 'TECH REPORTER',
+                    analysis: getRandomTemplate(story.title)
                 });
             }
-            if (articles.length >= 8) break;
+            if (articles.length >= 5) break;
         }
         return articles;
     } catch (e) { return []; }
 }
 
 async function main() {
-    console.log('📡 正在抓取全球 AI 情報...');
     const articles = await fetchHackerNews();
     const dateStr = new Date().toISOString().split('T')[0];
     const filename = `${dateStr}-ai-insights.md`;
 
-    const content = `---
+    let reportBody = `> **【AI INSIGHTS 頻道】每日新聞專題報導**\n\n`;
+    reportBody += `### 🌍 全球產業情勢觀測\n\n今日 AI 領域呈現出高度活躍的態勢，多項技術突破同時浮現。以下是本頻道為您整理的深度報導：\n\n---\n\n`;
+
+    articles.forEach((a, i) => {
+        reportBody += `### 🎙️ 專題報導 ${i+1}：${a.title}\n`;
+        reportBody += `**【本台特約記者報導】** ${a.analysis}\n\n`;
+        reportBody += `**核心摘要：** 目前這項發展已在開發者社群引發熱烈討論。從我們的觀測來看，這不僅僅是代碼的更新，更代表了硬體架構與軟體算法的進一步融合。\n\n`;
+        reportBody += `> 🔎 **情報來源：** [點擊此處閱讀原文詳細報導](${a.url})\n\n---\n\n`;
+    });
+
+    reportBody += `\n### 📺 頻道觀點\n今日的情報顯示，AI 技術正加速與現實應用場景接軌。我們建議關注相關企業的後續動作，這可能會是下一個季度的市場風向標。\n\n**AI INSIGHTS NETWORK 編輯群 綜合報導**`;
+
+    const fullContent = `---
 layout: post
-title: "AI INSIGHTS 每日情報：全球人工智慧動態彙整"
+title: "AI 新聞頻道：今日全球人工智慧動態深度報導"
 date: ${new Date().toISOString()}
-summary: "今日重點報導：${articles[0] ? articles[0].title : '產業趨勢更新'} 等多項重大情報..."
+summary: "今日頭條：${articles[0] ? articles[0].title : 'AI 產業趨勢更新'}。本頻道帶來深度解析與專題報導。"
 ---
 
-> **本報訊**：AI INSIGHTS 頻道為您追蹤今日最值得關注的技術突破與產業動態。
-
----
-
-## 🕒 今日頭條動態
-
-${articles.map((a, i) => `
-### 🟢 ${a.title}
-*由 ${a.source} 現場報導*
-
-今日該項目在技術社群引發高度關注。本頻道分析指出，這代表了當前產業對於技術落地的最新探索。您可以透過以下連結獲取完整情報：
-[🔗 查看原文報導](${a.url})
-`).join('\n\n')}
-
----
-
-## 💡 頻道評論
-今日的動態顯示 AI 領域正在從單純的模型競爭轉向多元化的應用場景。我們會持續為您追蹤後續發展。
-
-**AI INSIGHTS 編輯團隊 整理報導**
+${reportBody}
 `;
 
     if (!fs.existsSync(POSTS_DIR)) fs.mkdirSync(POSTS_DIR);
-    fs.writeFileSync(path.join(POSTS_DIR, filename), content);
-    console.log('✅ 新聞頻道內容已生成');
+    fs.writeFileSync(path.join(POSTS_DIR, filename), fullContent);
+    console.log('✅ 專業新聞報導內容已生成');
 }
 
 main();
