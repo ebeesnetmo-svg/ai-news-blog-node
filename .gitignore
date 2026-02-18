@@ -1,6 +1,5 @@
 # 依賴
 node_modules/
-package-lock.json
 
 # 輸出
 _site/
