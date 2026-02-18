@@ -1,0 +1,16 @@
+{
+  "title": "AI 每日新聞",
+  "description": "每天自動更新的 AI 領域最新資訊",
+  "url": "https://ebeesnetmo-svg.github.io/ai-news-blog-node",
+  "author": "AI News Bot",
+  "email": "ebeesnetmo-svg@gmail.com",
+  "github": {
+    "username": "ebeesnetmo-svg",
+    "repo": "ai-news-blog-node"
+  },
+  "news": {
+    "sources": ["hackernews", "reddit"],
+    "maxArticles": 10,
+    "keywords": ["AI", "machine learning", "deep learning", "LLM"]
+  }
+}

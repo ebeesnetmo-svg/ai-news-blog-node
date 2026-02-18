@@ -1,0 +1,23 @@
+# 依賴
+node_modules/
+package-lock.json
+
+# 輸出
+_site/
+
+# 環境變數
+.env
+.env.local
+
+# 日誌
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
