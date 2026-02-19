@@ -8,7 +8,7 @@ const BLOG_ROOT = path.join(__dirname, '..');
 const POSTS_DIR = path.join(BLOG_ROOT, '_posts');
 const OUTPUT_DIR = path.join(BLOG_ROOT, '_site');
 const CONFIG_FILE = path.join(BLOG_ROOT, 'config.json');
-const BASE_URL = '/ai-news-blog-node';
+const BASE_URL = '.';
 
 // ==========================================
 // Google AdSense 配置區 (在此貼上你的 AdSense ID)
@@ -181,15 +181,21 @@ function build() {
     let posts = [];
     if (fs.existsSync(POSTS_DIR)) {
         const files = fs.readdirSync(POSTS_DIR).filter(f => f.endsWith('.md')).sort().reverse();
+        console.log(`Found ${files.length} markdown files in ${POSTS_DIR}`);
         for (const file of files) {
             const content = fs.readFileSync(path.join(POSTS_DIR, file), 'utf-8');
-            const parsed = frontMatter(content);
-            posts.push({
-                file,
-                url: `${BASE_URL}/posts/${file.replace('.md', '.html')}`,
-                attributes: parsed.attributes,
-                body: parsed.body
-            });
+            try {
+                const parsed = frontMatter(content);
+                console.log(`Successfully parsed: ${file} - Title: ${parsed.attributes.title}`);
+                posts.push({
+                    file,
+                    url: `${BASE_URL}/posts/${file.replace('.md', '.html')}`,
+                    attributes: parsed.attributes,
+                    body: parsed.body
+                });
+            } catch (e) {
+                console.log(`Failed to parse ${file}: ${e.message}`);
+            }
         }
     }
 
