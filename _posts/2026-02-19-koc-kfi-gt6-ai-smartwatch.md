@@ -1,4 +1,5 @@
 # 小米有品 KFI GT6 AI 智慧通話手錶開箱實測：集結健康助理與生活管家於一身
+title: 小米有品 KFI GT6 AI 智慧通話手錶開箱實測：集結健康助理與生活管家於一身
 
 > 原文來源：[電腦王阿達](https://www.koc.com.tw/)  
 > 原文連結：[https://www.koc.com.tw/archives/629567](https://www.koc.com.tw/archives/629567)  

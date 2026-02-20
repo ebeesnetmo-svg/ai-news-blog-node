@@ -1,4 +1,5 @@
 # Google I/O 2026 深度展望：Gemini 3 與 AI 帝國的下一個十年
+title: Google I/O 2026 深度展望：Gemini 3 與 AI 帝國的下一個十年
 
 Google 官方已經宣佈，Google I/O 2026 將於 5 月 19 日在加州山景城回歸。今年的口號非常直白：「AI breakthroughs and updates」。這不僅是產品發佈會，更像是 Google 在 2026 年這個 AI 戰火鼎盛時期，向全世界宣示其領導地位的「軍武展示」。
 

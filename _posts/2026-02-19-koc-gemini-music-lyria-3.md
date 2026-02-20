@@ -1,4 +1,5 @@
 # Gemini Lyria 3 登場：每個人都能擁有的「AI 調音師」
+title: Gemini Lyria 3 登場：每個人都能擁有的「AI 調音師」
 
 Google 正式將 **Lyria 3** 音樂生成模型導入 Gemini。這代表以後你想創作一首背景音樂，不需要樂理知識，只要「出一張嘴」。
 
